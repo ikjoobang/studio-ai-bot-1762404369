@@ -235,7 +235,7 @@ app.use((req, res) => {
 });
 
 // 서버 시작
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`
 ╔════════════════════════════════════════╗
 ║     Studio AI Bot Server Running      ║
