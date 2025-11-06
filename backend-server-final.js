@@ -25,6 +25,23 @@ app.get('/health', (req, res) => {
     service: 'Studio AI Bot',
     timestamp: new Date().toISOString()
   });
+
+// 루트 경로 - 랜딩 페이지
+app.get('/', (req, res) => {
+  res.send(`<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Studio AI Bot API</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.box{background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,0.3);max-width:700px;padding:40px}h1{color:#667eea;margin-bottom:20px}.status{background:#10b981;color:#fff;padding:5px 15px;border-radius:20px;display:inline-block;margin-bottom:30px}.endpoint{background:#f3f4f6;border-left:4px solid #667eea;padding:15px;margin:10px 0;border-radius:5px}code{background:#1f2937;color:#10b981;padding:2px 8px;border-radius:3px;font-family:monospace}.method{background:#667eea;color:#fff;padding:3px 10px;border-radius:3px;font-weight:700;margin-right:10px}.post{background:#10b981}pre{background:#1f2937;color:#e5e7eb;padding:15px;border-radius:5px;overflow-x:auto;margin:15px 0}.contact{background:#eff6ff;padding:20px;border-radius:10px;margin-top:30px}.contact a{color:#667eea;text-decoration:none;font-weight:700}</style></head>
+<body><div class="box"><h1>🤖 Studio AI Bot API</h1><span class="status">✅ 서버 정상 작동 중</span>
+<h2>📡 API 엔드포인트</h2>
+<div class="endpoint"><span class="method">GET</span><code>${req.protocol}://${req.get('host')}/health</code><p style="margin-top:10px;color:#6b7280">서버 상태 확인</p></div>
+<div class="endpoint"><span class="method post">POST</span><code>${req.protocol}://${req.get('host')}/api/chat</code><p style="margin-top:10px;color:#6b7280">AI 챗봇 API</p></div>
+<h2 style="margin-top:30px">📝 사용 예시</h2><pre>{"message": "AI 영상 제작 서비스 문의",
+  "mode": "inquiry",
+  "history": []}</pre>
+<p style="margin:10px 0;color:#6b7280"><strong>mode:</strong> <code>inquiry</code> (일반) 또는 <code>consulting</code> (컨설팅)</p>
+<div class="contact"><h3 style="margin-bottom:10px">📧 문의</h3><p>이메일: <a href="mailto:studio.ikjoo@gmail.com">studio.ikjoo@gmail.com</a></p><p>웹사이트: <a href="https://studiojuai.com">@studiojuai.com</a></p></div></div></body></html>`);
+});
+
 });
 
 // 챗봇 API
