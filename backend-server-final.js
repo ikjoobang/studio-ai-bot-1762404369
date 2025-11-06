@@ -18,6 +18,144 @@ const openai = new OpenAI({
 app.use(cors());
 app.use(express.json());
 
+// 루트 경로 - API 정보 페이지
+app.get('/', (req, res) => {
+  const baseUrl = req.protocol + '://' + req.get('host');
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="ko">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Studio AI Bot API</title>
+      <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+        }
+        .container {
+          background: white;
+          border-radius: 20px;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+          max-width: 800px;
+          width: 100%;
+          padding: 40px;
+        }
+        h1 {
+          color: #667eea;
+          font-size: 2.5em;
+          margin-bottom: 10px;
+        }
+        .status {
+          display: inline-block;
+          background: #10b981;
+          color: white;
+          padding: 5px 15px;
+          border-radius: 20px;
+          font-size: 0.9em;
+          margin-bottom: 30px;
+        }
+        h2 {
+          color: #374151;
+          margin-top: 30px;
+          margin-bottom: 15px;
+          border-bottom: 2px solid #e5e7eb;
+          padding-bottom: 10px;
+        }
+        .endpoint {
+          background: #f3f4f6;
+          border-left: 4px solid #667eea;
+          padding: 15px;
+          margin: 10px 0;
+          border-radius: 5px;
+        }
+        .method {
+          display: inline-block;
+          background: #667eea;
+          color: white;
+          padding: 3px 10px;
+          border-radius: 3px;
+          font-size: 0.85em;
+          font-weight: bold;
+          margin-right: 10px;
+        }
+        .method.post { background: #10b981; }
+        code {
+          background: #1f2937;
+          color: #10b981;
+          padding: 2px 6px;
+          border-radius: 3px;
+          font-family: 'Courier New', monospace;
+        }
+        pre {
+          background: #1f2937;
+          color: #e5e7eb;
+          padding: 15px;
+          border-radius: 5px;
+          overflow-x: auto;
+          margin: 10px 0;
+        }
+        .contact {
+          background: #eff6ff;
+          padding: 20px;
+          border-radius: 10px;
+          margin-top: 30px;
+        }
+        .contact a {
+          color: #667eea;
+          text-decoration: none;
+          font-weight: bold;
+        }
+        .contact a:hover { text-decoration: underline; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h1>🤖 Studio AI Bot API</h1>
+        <span class="status">✅ 서버 정상 작동 중</span>
+        
+        <h2>📡 API 엔드포인트</h2>
+        
+        <div class="endpoint">
+          <span class="method">GET</span>
+          <code>${baseUrl}/health</code>
+          <p style="margin-top: 10px; color: #6b7280;">서버 상태 확인</p>
+        </div>
+        
+        <div class="endpoint">
+          <span class="method post">POST</span>
+          <code>${baseUrl}/api/chat</code>
+          <p style="margin-top: 10px; color: #6b7280;">AI 챗봇 API (일반 상담 / 전문 컨설팅)</p>
+        </div>
+        
+        <h2>📝 사용 예시</h2>
+        <pre>{
+  "message": "AI 영상 제작 서비스에 대해 알려주세요",
+  "mode": "inquiry",
+  "history": []
+}</pre>
+        
+        <p style="margin: 10px 0; color: #6b7280;">
+          <strong>mode:</strong> <code>inquiry</code> (일반 상담) 또는 <code>consulting</code> (전문 컨설팅)
+        </p>
+        
+        <div class="contact">
+          <h3 style="margin-bottom: 10px;">📧 문의</h3>
+          <p>이메일: <a href="mailto:studio.ikjoo@gmail.com">studio.ikjoo@gmail.com</a></p>
+          <p>웹사이트: <a href="https://studiojuai.com" target="_blank">@studiojuai.com</a></p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `);
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ 
@@ -227,37 +365,4 @@ Studio AI는 AI 기반 마케팅 솔루션 전문 기업입니다.
       error: '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.' 
     });
   }
-});
-
-// 404 처리
-app.use((req, res) => {
-  res.status(404).json({ error: 'Not Found' });
-});
-
-// 서버 시작
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`
-╔════════════════════════════════════════╗
-║     Studio AI Bot Server Running      ║
-╚════════════════════════════════════════╝
-
-🚀 Server: http://localhost:${PORT}
-📡 API Endpoint: http://localhost:${PORT}/api/chat
-💚 Health Check: http://localhost:${PORT}/health
-
-📧 Contact: studio.ikjoo@gmail.com
-🌐 Website: @studiojuai.com
-
-⏰ Started at: ${new Date().toLocaleString('ko-KR')}
-  `);
-});
-
-// 에러 핸들링
-process.on('unhandledRejection', (error) => {
-  console.error('Unhandled Rejection:', error);
-});
-
-process.on('uncaughtException', (error) => {
-  console.error('Uncaught Exception:', error);
-  process.exit(1);
 });
